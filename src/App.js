@@ -1,9 +1,7 @@
+import Directory from "./components/directory/directory";
+
 const App = () => {
-  return (
-    <div>
-      Hello World
-    </div>
-  );
+  return <Directory/>
 }
 
 export default App;
