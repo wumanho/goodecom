@@ -6,6 +6,7 @@
 .pnp.js
 .idea
 .gitignore
+src/utils/firebase
 # testing
 /coverage
 
