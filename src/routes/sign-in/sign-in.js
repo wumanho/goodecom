@@ -1,16 +1,21 @@
 import {sighInWithGooglePopup, createUserDocumentFromAuth} from '../../utils/firebase/firebase.util'
+import SighUpForm from "../../components/sign-up-form/sigh-up-form";
 
+/**
+ * Google 账号注册
+ * @returns {JSX.Element}
+ * @constructor
+ */
 const SignIn = () => {
   const logGoogleUser = async () => {
     const {user} = await sighInWithGooglePopup()
-    const userDocRef = await createUserDocumentFromAuth(user)
+    await createUserDocumentFromAuth(user)
   }
   return (
     <div>
       <h1>Sign In Page</h1>
-      <button onClick={logGoogleUser}>
-        Sign in with google popup
-      </button>
+      <button onClick={logGoogleUser}>通过 Google 账号登陆</button>
+      <SighUpForm/>
     </div>
   )
 }
