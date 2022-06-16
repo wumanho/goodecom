@@ -1,8 +1,8 @@
-import {Fragment} from "react";
 import {useState} from "react";
 import {createAuthUserWithEmailAndPassword, createUserDocumentFromAuth} from '../../utils/firebase/firebase.util'
 import FormInput from "../form-input/form-input";
-
+import './sign-up-form.scss'
+import Button from "../button/button";
 const defaultFormFields = {
   displayName: '',
   email: '',
@@ -42,8 +42,9 @@ const SighUpForm = () => {
   }
 
   return (
-    <Fragment>
-      <h1>使用邮箱注册</h1>
+    <div className='sign-up-container'>
+      <h2>还没有账号?</h2>
+      <span>使用邮箱注册</span>
       <form onSubmit={handleSubmit}>
         <FormInput
           label='昵称'
@@ -82,9 +83,9 @@ const SighUpForm = () => {
             name: 'confirmPassword',
             value: confirmPassword
           }}/>
-        <button type='submit'>提交</button>
+        <Button type='submit'>提交</Button>
       </form>
-    </Fragment>
+    </div>
   )
 }
 
