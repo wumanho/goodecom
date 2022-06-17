@@ -1,9 +1,18 @@
 import {Outlet, Link} from 'react-router-dom'
-import {Fragment} from "react";
+import {Fragment, useContext} from "react";
 import {ReactComponent as Logo} from "../../assets/crown.svg";
+import {signOutUser} from "../../utils/firebase/firebase.util";
 import './navigation.scss'
+import {UserContext} from "../../context/user.context";
 
-const navigation = () => {
+const Navigation = () => {
+  const {currentUser, setCurrentUser} = useContext(UserContext)
+
+  const handleSignOut = async () => {
+    await signOutUser()
+    setCurrentUser(null)
+  }
+
   return (
     <Fragment>
       <div className='navigation'>
@@ -12,11 +21,15 @@ const navigation = () => {
         </Link>
         <div className='nav-links-container'>
           <Link className='nav-link' to='/shop'>
-            SHOP
+            商城
           </Link>
-          <Link className='nav-link' to='/auth'>
-            SIGN IN
-          </Link>
+          {
+            currentUser ?
+              <span className='nav-link' onClick={handleSignOut}>退出登陆</span> :
+              <Link className='nav-link' to='/auth'>
+                登陆
+              </Link>
+          }
         </div>
       </div>
       <Outlet/>
@@ -24,4 +37,4 @@ const navigation = () => {
   )
 }
 
-export default navigation
+export default Navigation
