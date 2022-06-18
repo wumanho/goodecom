@@ -6,11 +6,10 @@ import './navigation.scss'
 import {UserContext} from "../../context/user.context";
 
 const Navigation = () => {
-  const {currentUser, setCurrentUser} = useContext(UserContext)
+  const {currentUser} = useContext(UserContext)
 
   const handleSignOut = async () => {
     await signOutUser()
-    setCurrentUser(null)
   }
 
   return (
