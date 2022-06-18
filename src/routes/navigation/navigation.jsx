@@ -1,15 +1,22 @@
 import {Outlet, Link} from 'react-router-dom'
-import {Fragment, useContext} from "react";
+import {Fragment, useContext, useState} from "react";
 import {ReactComponent as Logo} from "../../assets/crown.svg";
 import {signOutUser} from "../../utils/firebase/firebase.util";
 import './navigation.scss'
 import {UserContext} from "../../context/user.context";
+import CartIcon from "../../components/cart-icon/cart-icon";
+import CartDropdown from "../../components/cart-dropdown/cart-dropdown";
 
 const Navigation = () => {
   const {currentUser} = useContext(UserContext)
+  const [showDropdown, setShowDropdown] = useState(false)
 
   const handleSignOut = async () => {
     await signOutUser()
+  }
+
+  const toggleDropdown = () => {
+    setShowDropdown(!showDropdown)
   }
 
   return (
@@ -29,7 +36,9 @@ const Navigation = () => {
                 登陆
               </Link>
           }
+          <CartIcon toggle={toggleDropdown}/>
         </div>
+        {showDropdown && <CartDropdown/>}
       </div>
       <Outlet/>
     </Fragment>
