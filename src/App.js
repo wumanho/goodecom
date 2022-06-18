@@ -2,15 +2,7 @@ import Home from "./routes/home/home";
 import {Routes, Route} from "react-router-dom";
 import Navigation from "./routes/navigation/navigation";
 import Auth from "./routes/auth/auth";
-import {Fragment} from "react";
-
-const Shop = () => {
-  return (
-    <Fragment>
-      <h1>I am the SHOP</h1>
-    </Fragment>
-  )
-}
+import Shop from "./routes/shop/shop";
 
 const App = () => {
   return (
