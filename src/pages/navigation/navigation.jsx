@@ -38,7 +38,7 @@ const Navigation = () => {
           }
           <CartIcon toggle={toggleDropdown}/>
         </div>
-        {showDropdown && <CartDropdown/>}
+        {showDropdown && <CartDropdown toggle={toggleDropdown}/>}
       </div>
       <Outlet/>
     </Fragment>
