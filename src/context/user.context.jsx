@@ -1,5 +1,5 @@
-import {createContext,  useEffect, useReducer} from "react";
-import {createUserDocumentFromAuth, onAuthStateChangeListener} from "../utils/firebase/firebase.util";
+import {createContext, useEffect, useReducer} from "react";
+import {createUserDocumentFromAuth, onAuthStateChangeListener, createAction} from "../utils";
 
 export const UserContext = createContext({
   currentUser: null,
@@ -33,7 +33,8 @@ export const UserProvider = ({children}) => {
   const {currentUser} = state
 
   const setCurrentUser = (user) => {
-    dispatch({type: USER_ACTION_TYPES.SET_CURRENT_USER, payload: user})
+    const action = createAction(USER_ACTION_TYPES.SET_CURRENT_USER, user)
+    dispatch(action)
   }
 
   // 注册监听器

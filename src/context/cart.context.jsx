@@ -1,4 +1,5 @@
-import {createContext, useState, useEffect} from "react";
+import {createContext, useReducer} from "react";
+import {createAction} from '../utils'
 
 export const CartContext = createContext({
   cartItems: [],
@@ -11,6 +12,10 @@ export const CartContext = createContext({
   clearItemFromCart: () => {
   }
 })
+
+const CART_ACTION_TYPES = {
+  SET_CART__ITEMS: 'SET_CART__ITEMS'
+}
 
 /**
  * 辅助函数，实现加入购物车逻辑，如果不存在就创建，已存在就 +1
@@ -65,27 +70,53 @@ const findItemFromCart = (cartItems, matchData) => {
   return cartItems.find(item => item.id === matchData.id)
 }
 
-export const CartProvider = ({children}) => {
-  const [cartItems, setCartItems] = useState([])
-  const [total, setTotal] = useState(0)
-  const [totalPrice, setTotalPrice] = useState(0)
+const INITIAL_STATE = {
+  cartItems: [],
+  total: 0,
+  totalPrice: 0,
+}
 
-  // 商品总数计算
-  useEffect(() => {
-    setTotal(cartItems.reduce((total, cur) => total + cur.quantity, 0))
-    setTotalPrice(cartItems.reduce((total, cur) => total + (cur.quantity * cur.price), 0))
-  }, [cartItems])
+const cartReducer = (state, action) => {
+  const {type, payload} = action
+  switch (type) {
+    case CART_ACTION_TYPES.SET_CART__ITEMS:
+      return {
+        ...state,
+        ...payload
+      }
+    default:
+      throw new Error(`无法处理类型${type}`)
+  }
+}
+
+export const CartProvider = ({children}) => {
+  const [state, dispatch] = useReducer(cartReducer, INITIAL_STATE)
+  const {cartItems, total, totalPrice} = state
+
+  const updateCartItemsReducer = (newCartItems) => {
+    const newTotal = newCartItems.reduce((total, cur) => total + cur.quantity, 0)
+    const newTotalPrice = newCartItems.reduce((total, cur) => total + (cur.quantity * cur.price), 0)
+    const action = createAction(CART_ACTION_TYPES.SET_CART__ITEMS, {
+      cartItems: newCartItems,
+      total: newTotal,
+      totalPrice: newTotalPrice
+    })
+    dispatch(action)
+  }
 
   const addItemToCart = (productToAdd) => {
-    setCartItems(addCartItem(cartItems, productToAdd))
+    const newCartItems = addCartItem(cartItems, productToAdd)
+    updateCartItemsReducer(newCartItems)
   }
 
   const removeItemToCart = (cartItemToRemove) => {
-    setCartItems(removeCartItem(cartItems, cartItemToRemove))
+    const newCartItems = removeCartItem(cartItems, cartItemToRemove)
+    updateCartItemsReducer(newCartItems)
   }
 
   const clearItemFromCart = (cartItemToClear) => {
-    setCartItems(clearCartItem(cartItems, cartItemToClear))
+    const newCartItems = clearCartItem(cartItems, cartItemToClear)
+    updateCartItemsReducer(newCartItems)
   }
 
   const value = {cartItems, addItemToCart, total, removeItemToCart, clearItemFromCart, totalPrice}
